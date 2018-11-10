@@ -1,5 +1,6 @@
 package com.model2.mvc.web.product;
 
+import java.io.File;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
@@ -44,9 +46,13 @@ public class ProductController {
 	int pageSize;
 	
 	@RequestMapping( value="/addProduct", method=RequestMethod.POST )
-	public String addProduct( @ModelAttribute("product") Product product ) throws Exception {
+	public String addProduct( @ModelAttribute("product") Product product, @RequestParam("uploadFile") MultipartFile multipartFile ) throws Exception {
+		File file = new File("/uploadFile/"+multipartFile.getOriginalFilename());
+		multipartFile.transferTo(file);
+		
 
 		System.out.println("/addProduct.do");
+		product.setFileName(multipartFile.getOriginalFilename());
 		productService.addProduct(product);
 		
 		return "forward:/product/confirmProduct.jsp";

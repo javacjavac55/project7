@@ -64,13 +64,14 @@ public class ProductController {
 		if (history == null || history.length()==0) {
 			history=prodNo+"";
 		} else {
-			if (history.indexOf(prodNo+"") == -1) {
-				history.replace(prodNo+",", "");
-				history.replace(prodNo+"", "");//마지막에 붙어있는 거 없애기
+			if (history.indexOf(prodNo+"") != -1) {
+				history=history.replace(prodNo+",", "");
+				history=history.replace(","+prodNo, "");//마지막에 붙어있는 거 없애기
+				history=prodNo+","+history;
+			} else {
 				history=prodNo+","+history;
 			}
 		}
-		
 		Cookie cookie = new Cookie("history",history);
 		cookie.setMaxAge(-1);
 		cookie.setPath("/");
